@@ -3,12 +3,17 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
+import { MyService } from './my-service'
+import { MyFakeService } from './my-fake-service'
+
 describe('AppComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent
       ],
+      //need to import these two classes, so similar to java...
+      providers:[{provide:MyService,useClass:MyFakeService}] // --> new code
     });
     TestBed.compileComponents();
   });
@@ -30,5 +35,11 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('h1').textContent).toContain('app works!');
+  }));
+
+  it('should attach message from service to component', async(() => {
+    let fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.message).toBe('fake service');
   }));
 });
